@@ -3,3 +3,5 @@
 learning about networking and github linking
 also trying to gain connections on linkedin
 also im posting some of my work online toooooo!!
+
+also im learning flutter architecture
