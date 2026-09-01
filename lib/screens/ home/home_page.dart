@@ -1,3 +1,4 @@
+import 'package:fitflow/components/home/welcome_section.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/app_drawer.dart';
 
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
 
           children: [
 
-            //WelcomeSection(),
+            WelcomeSection(),
 
             SizedBox(height: 20),
 
