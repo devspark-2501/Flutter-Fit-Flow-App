@@ -1,6 +1,5 @@
-import 'package:fitflow/Screens/%20home/home_page.dart';
 import 'package:flutter/material.dart';
-// import 'package:fitflow/screens/home/home_page.dart';
+import 'package:fitflow/Screens/%20home/home_page.dart';
 
 void main() {
   runApp(FitFlowCode());
@@ -25,10 +24,31 @@ class FitFlowCode extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: Color(0xFF1565C0),
           elevation: 0,
+
+          centerTitle: false,
+
+          titleTextStyle: TextStyle(
+            color: Color(0xFF1565C0),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+
+          iconTheme: IconThemeData(
+            color: Color(0xFF1565C0),
+            size: 26,
+          ),
+        ),
+
+        cardTheme: CardThemeData(
+          color: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
 
-      home: HomePage()
+      home: HomePage(),
     );
   }
 }
