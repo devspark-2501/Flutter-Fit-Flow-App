@@ -1,4 +1,5 @@
 import 'package:fitflow/components/home/daily_workout_card.dart';
+import 'package:fitflow/components/home/quick_actions.dart';
 import 'package:fitflow/components/home/welcome_section.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/app_drawer.dart';
@@ -109,7 +110,7 @@ class HomePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            //QuickActions(),
+            QuickActions(),
 
             const SizedBox(height: 20),
 
