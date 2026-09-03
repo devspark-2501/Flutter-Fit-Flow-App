@@ -1,5 +1,6 @@
 import 'package:fitflow/Screens/%20home/home_page.dart';
 import 'package:fitflow/screens/%20planner/planner_page.dart';
+import 'package:fitflow/screens/timer/timer_page.dart'; // Added TimerPage import
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -52,6 +53,11 @@ class AppDrawer extends StatelessWidget {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else if (title == "Timer") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TimerPage()),
       );
     }
   }
