@@ -2,9 +2,6 @@ import 'package:fitflow/Screens/%20home/home_page.dart';
 import 'package:fitflow/screens/%20planner/planner_page.dart';
 import 'package:flutter/material.dart';
 
-// import 'package:fitflow/screens/home/home_page.dart';
-// import 'package:fitflow/screens/planner/planner_page.dart';
-
 class AppDrawer extends StatelessWidget {
   AppDrawer({super.key});
 
@@ -138,18 +135,11 @@ class AppDrawer extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          // Hover and splash animations
-                          hoverColor: primary.withOpacity(0.08),
-                          focusColor: primary.withOpacity(0.12),
-                          splashColor: primary.withOpacity(0.15),
                           leading: Icon(item["icon"], color: primary),
                           title: Text(
                             title,
-                            style: TextStyle(
-                              fontWeight: title == "Planner" || title == "Home"
-                                  ? FontWeight.bold
-                                  : FontWeight.w500,
-                              color: title == "Planner" ? primary : null,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           onTap: () => _navigateToScreen(context, title),
@@ -172,7 +162,6 @@ class AppDrawer extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    hoverColor: primary.withOpacity(0.08),
                     leading: Icon(Icons.person, color: primary),
                     title: const Text("Profile"),
                     onTap: () {
@@ -183,7 +172,6 @@ class AppDrawer extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    hoverColor: primary.withOpacity(0.08),
                     leading: Icon(Icons.settings, color: primary),
                     title: const Text("Settings"),
                     onTap: () {
