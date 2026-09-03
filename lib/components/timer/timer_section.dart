@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class TimerSection extends StatefulWidget {
@@ -25,6 +26,7 @@ class _TimerSectionState extends State<TimerSection> {
         setState(() => _remainingSeconds--);
       } else {
         _pauseTimer();
+        // AssetSource automatically looks inside the root 'assets/' directory
         widget.audioPlayer.play(AssetSource('alarm_sound.mp3'));
       }
     });
@@ -40,34 +42,65 @@ class _TimerSectionState extends State<TimerSection> {
     setState(() => _remainingSeconds = _initialSeconds);
   }
 
-  Future<void> _selectTime() async {
-    if (_isRunning) return; // Prevent editing while timer is active
+  void _showTimerPicker() {
+    if (_isRunning) return;
 
-    final currentMinutes = _remainingSeconds ~/ 60;
-    final currentSeconds = _remainingSeconds % 60;
+    Duration tempDuration = Duration(seconds: _remainingSeconds);
 
-    final TimeOfDay? picked = await showTimePicker(
+    showModalBottomSheet(
       context: context,
-      initialTime: TimeOfDay(hour: currentMinutes, minute: currentSeconds),
-      helpText: "SELECT TIMER DURATION (MM:SS)",
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel"),
+                  ),
+                  const Text(
+                    "Set Duration",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (tempDuration.inSeconds > 0) {
+                        setState(() {
+                          _initialSeconds = tempDuration.inSeconds;
+                          _remainingSeconds = tempDuration.inSeconds;
+                        });
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Done"),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: CupertinoTimerPicker(
+                  mode: CupertinoTimerPickerMode.ms,
+                  initialTimerDuration: tempDuration,
+                  onTimerDurationChanged: (Duration newDuration) {
+                    tempDuration = newDuration;
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
-
-    if (picked != null) {
-      // Treat picked hour as minutes and picked minute as seconds
-      final totalSecs = (picked.hour * 60) + picked.minute;
-      if (totalSecs > 0) {
-        setState(() {
-          _initialSeconds = totalSecs;
-          _remainingSeconds = totalSecs;
-        });
-      }
-    }
   }
 
   String _formatTime(int seconds) {
@@ -90,16 +123,15 @@ class _TimerSectionState extends State<TimerSection> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Tap time display to open clock picker
           GestureDetector(
-            onTap: _selectTime,
+            onTap: _showTimerPicker,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
               decoration: BoxDecoration(
                 color: primary.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: primary.withOpacity(0.3),
+                  color: primary.withOpacity(0.2),
                   width: 2,
                 ),
               ),
@@ -114,17 +146,18 @@ class _TimerSectionState extends State<TimerSection> {
                       letterSpacing: 2,
                     ),
                   ),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.edit, size: 16, color: primary),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       Text(
-                        "Tap to set time",
+                        "Tap to adjust duration",
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           color: primary,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
