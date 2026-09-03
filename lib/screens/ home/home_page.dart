@@ -1,4 +1,5 @@
 import 'package:fitflow/components/home/daily_workout_card.dart';
+import 'package:fitflow/components/home/progress_card.dart';
 import 'package:fitflow/components/home/quick_actions.dart';
 import 'package:fitflow/components/home/welcome_section.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,7 @@ class HomePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            //ProgressCard(),
+            ProgressCard(),
           ],
         ),
       ),
