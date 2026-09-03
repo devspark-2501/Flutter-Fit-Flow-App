@@ -1,4 +1,9 @@
+import 'package:fitflow/Screens/%20home/home_page.dart';
+import 'package:fitflow/screens/%20planner/planner_page.dart';
 import 'package:flutter/material.dart';
+
+// import 'package:fitflow/screens/home/home_page.dart';
+// import 'package:fitflow/screens/planner/planner_page.dart';
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({super.key});
@@ -38,6 +43,22 @@ class AppDrawer extends StatelessWidget {
     },
   ];
 
+  void _navigateToScreen(BuildContext context, String title) {
+    Navigator.pop(context); // Close drawer first
+
+    if (title == "Planner") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const PlannerPage()),
+      );
+    } else if (title == "Home") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -48,11 +69,10 @@ class AppDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-
             // Header
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -75,16 +95,14 @@ class AppDrawer extends StatelessWidget {
                       color: Colors.white.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.fitness_center,
                       size: 32,
                       color: Colors.white,
                     ),
                   ),
-
-                  SizedBox(height: 14),
-
-                  Text(
+                  const SizedBox(height: 14),
+                  const Text(
                     "FITFLOW",
                     style: TextStyle(
                       fontSize: 24,
@@ -93,7 +111,6 @@ class AppDrawer extends StatelessWidget {
                       letterSpacing: 0.5,
                     ),
                   ),
-
                   Text(
                     "Your Fitness Journey",
                     style: TextStyle(
@@ -105,7 +122,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             // Main menu
             Expanded(
@@ -114,25 +131,28 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   ...menuItems.map(
                         (item) {
+                      final String title = item["title"];
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 3),
                         child: ListTile(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
+                          // Hover and splash animations
+                          hoverColor: primary.withOpacity(0.08),
+                          focusColor: primary.withOpacity(0.12),
+                          splashColor: primary.withOpacity(0.15),
                           leading: Icon(item["icon"], color: primary),
                           title: Text(
-                            item["title"],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
+                            title,
+                            style: TextStyle(
+                              fontWeight: title == "Planner" || title == "Home"
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              color: title == "Planner" ? primary : null,
                             ),
                           ),
-
-                          onTap: () {
-                            Navigator.pop(context);
-
-                            // We will add page navigation here later.
-                          },
+                          onTap: () => _navigateToScreen(context, title),
                         ),
                       );
                     },
@@ -141,7 +161,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            Divider(indent: 16, endIndent: 16),
+            const Divider(indent: 16, endIndent: 16),
 
             // Bottom options
             Padding(
@@ -152,19 +172,20 @@ class AppDrawer extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
+                    hoverColor: primary.withOpacity(0.08),
                     leading: Icon(Icons.person, color: primary),
-                    title: Text("Profile"),
+                    title: const Text("Profile"),
                     onTap: () {
                       Navigator.pop(context);
                     },
                   ),
-
                   ListTile(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
+                    hoverColor: primary.withOpacity(0.08),
                     leading: Icon(Icons.settings, color: primary),
-                    title: Text("Settings"),
+                    title: const Text("Settings"),
                     onTap: () {
                       Navigator.pop(context);
                     },
@@ -173,7 +194,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
