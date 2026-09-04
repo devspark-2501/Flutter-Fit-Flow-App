@@ -17,12 +17,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
   final List<String> categories = ['Chest', 'Back', 'Legs', 'Arms'];
 
-  // Dynamically returns the section widget matching the selected pill
   Widget _getSelectedSection() {
     switch (selectedCategoryIndex) {
       case 0:
         return const ChestSection();
-
+      // case 1:
+      //   return const BackSection();
+      // case 2:
+      //   return const LegsSection();
+      // case 3:
+      //   return const ArmsSection();
       default:
         return const ChestSection();
     }
@@ -42,40 +46,72 @@ class _WorkoutPageState extends State<WorkoutPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // Opening Header Banner
+            // Styled Opening Hero Banner Widget
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'WORKOUT ROUTINES',
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        primaryColor,
+                        primaryColor.withOpacity(0.8),
+                      ],
                     ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Target Your Muscles',
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: primaryColor.withOpacity(0.25),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Select a muscle group below to explore video exercises and targeted muscle breakdowns.',
-                      style: TextStyle(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
-                        fontSize: 14,
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'WORKOUT ROUTINES',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Target Your Muscles',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Select a muscle group below to view full-screen video demonstrations and form guides.',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -84,7 +120,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
             SliverToBoxAdapter(
               child: Container(
                 height: 45,
-                margin: const EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 16),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -128,7 +164,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
             // Active Muscle Section Component
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverToBoxAdapter(
                 child: _getSelectedSection(),
               ),
