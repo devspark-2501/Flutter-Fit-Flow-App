@@ -1,6 +1,10 @@
+// import 'package:fitflow/screens/home/home_page.dart';
+// import 'package:fitflow/screens/planner/planner_page.dart';
 import 'package:fitflow/Screens/%20home/home_page.dart';
 import 'package:fitflow/screens/%20planner/planner_page.dart';
-import 'package:fitflow/screens/timer/timer_page.dart'; // Added TimerPage import
+import 'package:fitflow/screens/timer/timer_page.dart';
+import 'package:fitflow/screens/workouts/workout_page.dart';
+// import 'package:fitflow/screens/workout/workout_page.dart'; // Added WorkoutPage import
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -44,7 +48,12 @@ class AppDrawer extends StatelessWidget {
   void _navigateToScreen(BuildContext context, String title) {
     Navigator.pop(context); // Close drawer first
 
-    if (title == "Planner") {
+    if (title == "Workouts") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WorkoutPage()),
+      );
+    } else if (title == "Planner") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const PlannerPage()),
