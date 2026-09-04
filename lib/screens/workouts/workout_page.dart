@@ -1,4 +1,6 @@
+import 'package:fitflow/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
+// import 'package:fitflow/components/app_drawer.dart'; // Ensure path matches your structure
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({super.key});
@@ -8,19 +10,25 @@ class WorkoutPage extends StatefulWidget {
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
-  // Selected category index (0: All, 1: Chest, 2: Back, 3: Legs)
-  int selectedCategoryIndex = 1;
+  int selectedCategoryIndex = 0;
 
-  final List<String> categories = ['All', 'Chest', 'Back', 'Legs', 'Arms'];
+  final List<String> categories = ['Chest', 'Back', 'Legs', 'Arms'];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      appBar: AppBar(
+        title: const Text('Workouts'),
+        elevation: 0,
+      ),
+      drawer: AppDrawer(),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // 1. Top Opening Section Header
+            // Opening Header Banner
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -30,26 +38,26 @@ class _WorkoutPageState extends State<WorkoutPage> {
                     Text(
                       'WORKOUT ROUTINES',
                       style: TextStyle(
-                        color: Colors.grey[400],
+                        color: primaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       'Target Your Muscles',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: theme.colorScheme.onSurface,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Select a muscle group below to view exercises, target areas, and video demonstrations.',
+                      'Select a muscle group below to explore video exercises and targeted muscle breakdowns.',
                       style: TextStyle(
-                        color: Colors.grey[400],
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
                         fontSize: 14,
                       ),
                     ),
@@ -58,7 +66,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
               ),
             ),
 
-            // 2. Muscle Group Selector (Horizontal Pills)
+            // Horizontal Pill Filter Bar
             SliverToBoxAdapter(
               child: Container(
                 height: 45,
@@ -83,15 +91,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? Theme.of(context).primaryColor
-                              : const Color(0xFF1E1E1E),
+                              ? primaryColor
+                              : primaryColor.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: Center(
                           child: Text(
                             categories[index],
                             style: TextStyle(
-                              color: isSelected ? Colors.black : Colors.white,
+                              color: isSelected ? Colors.white : primaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -104,29 +112,41 @@ class _WorkoutPageState extends State<WorkoutPage> {
               ),
             ),
 
-            // 3. Exercise List Placeholder (Component Slot)
+            // Exercise Slot Placeholder
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                    // Placeholder for exercise cards (Chest, Back, etc.)
                     return Container(
                       height: 120,
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E1E),
+                        color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: primaryColor.withOpacity(0.2),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Center(
                         child: Text(
-                          '${categories[selectedCategoryIndex]} Exercise Card ${index + 1}',
-                          style: TextStyle(color: Colors.grey[400]),
+                          '${categories[selectedCategoryIndex]} Video Exercise ${index + 1}',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     );
                   },
-                  childCount: 3, // Showing 3 exercise slots by default
+                  childCount: 3,
                 ),
               ),
             ),
