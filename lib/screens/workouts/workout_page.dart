@@ -1,6 +1,9 @@
+import 'package:fitflow/components/workout/arms_section.dart';
+import 'package:fitflow/components/workout/back_section.dart';
+import 'package:fitflow/components/workout/chest_section.dart';
+import 'package:fitflow/components/workout/legs_section.dart';
 import 'package:fitflow/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
-// import 'package:fitflow/components/app_drawer.dart'; // Ensure path matches your structure
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({super.key});
@@ -13,6 +16,17 @@ class _WorkoutPageState extends State<WorkoutPage> {
   int selectedCategoryIndex = 0;
 
   final List<String> categories = ['Chest', 'Back', 'Legs', 'Arms'];
+
+  // Dynamically returns the section widget matching the selected pill
+  Widget _getSelectedSection() {
+    switch (selectedCategoryIndex) {
+      case 0:
+        return const ChestSection();
+
+      default:
+        return const ChestSection();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,42 +126,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
               ),
             ),
 
-            // Exercise Slot Placeholder
+            // Active Muscle Section Component
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    return Container(
-                      height: 120,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: primaryColor.withOpacity(0.2),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${categories[selectedCategoryIndex]} Video Exercise ${index + 1}',
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: 3,
-                ),
+              sliver: SliverToBoxAdapter(
+                child: _getSelectedSection(),
               ),
             ),
           ],
