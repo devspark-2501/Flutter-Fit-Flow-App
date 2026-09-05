@@ -1,16 +1,14 @@
-// import 'package:fitflow/screens/home/home_page.dart';
-// import 'package:fitflow/screens/planner/planner_page.dart';
 import 'package:fitflow/Screens/%20home/home_page.dart';
 import 'package:fitflow/screens/%20planner/planner_page.dart';
 import 'package:fitflow/screens/timer/timer_page.dart';
+import 'package:fitflow/screens/water/water_page.dart';
 import 'package:fitflow/screens/workouts/workout_page.dart';
-// import 'package:fitflow/screens/workout/workout_page.dart'; // Added WorkoutPage import
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({super.key});
 
-  final List<Map<String, dynamic>> menuItems = [
+  final List<Map<String, dynamic>> menuItems = const [
     {
       "title": "Home",
       "icon": Icons.home,
@@ -48,25 +46,30 @@ class AppDrawer extends StatelessWidget {
   void _navigateToScreen(BuildContext context, String title) {
     Navigator.pop(context); // Close drawer first
 
-    if (title == "Workouts") {
+    if (title == "Home") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else if (title == "Workouts") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const WorkoutPage()),
+      );
+    } else if (title == "Timer") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const TimerPage()),
       );
     } else if (title == "Planner") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const PlannerPage()),
       );
-    } else if (title == "Home") {
+    } else if (title == "Water") {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else if (title == "Timer") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const TimerPage()),
+        MaterialPageRoute(builder: (context) => const WaterPage()),
       );
     }
   }
@@ -81,7 +84,7 @@ class AppDrawer extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            // Header
+            // Drawer Header Banner
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
@@ -136,7 +139,7 @@ class AppDrawer extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // Main menu
+            // Navigation Items List
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -168,7 +171,7 @@ class AppDrawer extends StatelessWidget {
 
             const Divider(indent: 16, endIndent: 16),
 
-            // Bottom options
+            // Profile & Settings Options
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
