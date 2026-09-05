@@ -19,22 +19,104 @@ class _WaterTrackerState extends State<WaterTracker> {
   final List<Map<String, String>> _logs = [];
 
   void _addWater(int amount) {
+    if (amount <= 0) return;
     setState(() {
       _currentIntakeMl += amount;
       final now = TimeOfDay.now();
       _logs.insert(0, {
-        'amount': '+${amount} ml',
-        'time': '${now.hourOfPeriod}:${now.minute.toString().padLeft(2, '0')} ${now.period == DayPeriod.am ? 'AM' : 'PM'}',
+        'amount': '+$amount ml',
+        'time':
+        '${now.hourOfPeriod == 0 ? 12 : now.hourOfPeriod}:${now.minute.toString().padLeft(2, '0')} ${now.period == DayPeriod.am ? 'AM' : 'PM'}',
       });
     });
+  }
+
+  void _showCustomIntakeDialog(Color primaryColor) {
+    final TextEditingController customController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Enter Custom Amount',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: customController,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: 'Water Intake (ml)',
+                  suffixText: 'ml',
+                  prefixIcon: Icon(Icons.edit, color: primaryColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    final int? enteredAmount =
+                    int.tryParse(customController.text);
+                    if (enteredAmount != null && enteredAmount > 0) {
+                      _addWater(enteredAmount);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text(
+                    'Add Intake',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = Colors.blueAccent;
-    final int remainingMl = (widget.dailyGoalMl - _currentIntakeMl).clamp(0, widget.dailyGoalMl);
-    final double progress = (_currentIntakeMl / widget.dailyGoalMl).clamp(0.0, 1.0);
+    final int remainingMl =
+    (widget.dailyGoalMl - _currentIntakeMl).clamp(0, widget.dailyGoalMl);
+    final double progress =
+    (_currentIntakeMl / widget.dailyGoalMl).clamp(0.0, 1.0);
 
     return Column(
       children: [
@@ -81,7 +163,7 @@ class _WaterTrackerState extends State<WaterTracker> {
                         ),
                       ),
                       Text(
-                        '${_currentIntakeMl} / ${widget.dailyGoalMl} ml',
+                        '$_currentIntakeMl / ${widget.dailyGoalMl} ml',
                         style: TextStyle(
                           fontSize: 12,
                           color: theme.colorScheme.onSurface.withOpacity(0.6),
@@ -93,7 +175,8 @@ class _WaterTrackerState extends State<WaterTracker> {
               ),
               const SizedBox(height: 20),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   color: primaryColor.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(12),
@@ -116,7 +199,7 @@ class _WaterTrackerState extends State<WaterTracker> {
 
         const SizedBox(height: 16),
 
-        // Quick Add Buttons
+        // Quick Add Buttons & Manual Custom Intake
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -138,9 +221,34 @@ class _WaterTrackerState extends State<WaterTracker> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildAddButton(150, 'Glass (150ml)', Icons.local_drink, primaryColor),
-                  _buildAddButton(250, 'Cup (250ml)', Icons.water_drop, primaryColor),
-                  _buildAddButton(500, 'Bottle (500ml)', Icons.wine_bar, primaryColor),
+                  _buildAddButton(
+                    150,
+                    'Glass',
+                    Icons.local_drink,
+                    primaryColor,
+                        () => _addWater(150),
+                  ),
+                  _buildAddButton(
+                    250,
+                    'Cup',
+                    Icons.water_drop,
+                    primaryColor,
+                        () => _addWater(250),
+                  ),
+                  _buildAddButton(
+                    500,
+                    'Bottle',
+                    Icons.wine_bar,
+                    primaryColor,
+                        () => _addWater(500),
+                  ),
+                  _buildAddButton(
+                    0,
+                    'Custom',
+                    Icons.edit,
+                    primaryColor,
+                        () => _showCustomIntakeDialog(primaryColor),
+                  ),
                 ],
               ),
             ],
@@ -182,12 +290,24 @@ class _WaterTrackerState extends State<WaterTracker> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.water_drop, color: primaryColor, size: 16),
+                              Icon(Icons.water_drop,
+                                  color: primaryColor, size: 16),
                               const SizedBox(width: 8),
-                              Text(log['amount']!, style: const TextStyle(fontWeight: FontWeight.w600)),
+                              Text(
+                                log['amount']!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ],
                           ),
-                          Text(log['time']!, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.5), fontSize: 12)),
+                          Text(
+                            log['time']!,
+                            style: TextStyle(
+                              color:
+                              theme.colorScheme.onSurface.withOpacity(0.5),
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -200,9 +320,15 @@ class _WaterTrackerState extends State<WaterTracker> {
     );
   }
 
-  Widget _buildAddButton(int amount, String label, IconData icon, Color primaryColor) {
+  Widget _buildAddButton(
+      int amount,
+      String label,
+      IconData icon,
+      Color primaryColor,
+      VoidCallback onTap,
+      ) {
     return GestureDetector(
-      onTap: () => _addWater(amount),
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -215,7 +341,7 @@ class _WaterTrackerState extends State<WaterTracker> {
           ),
           const SizedBox(height: 6),
           Text(
-            '+$amount ml',
+            amount > 0 ? '+$amount ml' : label,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,

@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
     if (title == "Home") {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } else if (title == "Workouts") {
       Navigator.pushReplacement(
