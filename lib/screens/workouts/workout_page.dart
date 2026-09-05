@@ -21,8 +21,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
     switch (selectedCategoryIndex) {
       case 0:
         return const ChestSection();
-      // case 1:
-      //   return const BackSection();
+       case 1:
+        return const BackSection();
       // case 2:
       //   return const LegsSection();
       // case 3:
