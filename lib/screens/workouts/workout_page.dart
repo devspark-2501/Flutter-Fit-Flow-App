@@ -25,8 +25,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         return const BackSection();
        case 2:
          return const LegsSection();
-      // case 3:
-      //   return const ArmsSection();
+       case 3:
+         return const ArmsSection();
       default:
         return const ChestSection();
     }
